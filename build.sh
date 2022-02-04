@@ -1,5 +1,7 @@
 #!/usr/bin/bash 
 
+python3 gen_cmake.py ./CMakeLists.txt.template
+
 make
 retVal=$?
 
