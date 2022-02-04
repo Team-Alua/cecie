@@ -4,7 +4,7 @@ make
 retVal=$?
 
 if [ $retVal -ne 0 ]; then
-    echo $retVal
+    echo "There was an issue compiling" 
     exit
 fi
 
