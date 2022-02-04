@@ -46,3 +46,6 @@ _deps
 
 # PS4 stuff
 *.pkg
+
+# Consequences of Autogenerating CMakeLists.txt
+CMakeLists.txt
