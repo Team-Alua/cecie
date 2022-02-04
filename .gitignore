@@ -44,3 +44,5 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 
+# PS4 stuff
+*.pkg
