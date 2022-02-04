@@ -1,0 +1,32 @@
+cmake_minimum_required(VERSION 3.0)
+
+SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+project(cecie)
+
+SET(TOOLCHAIN $ENV{OO_PS4_TOOLCHAIN})
+
+SET(CMAKE_C_COMPILER /usr/bin/clang)
+
+SET(CMAKE_CXX_COMPILER /usr/bin/clang++)
+
+SET(EXEC_NAME "${CMAKE_PROJECT_NAME}.elf")
+
+SET(EXEC_DIR "${CMAKE_SOURCE_DIR}${CMAKE_FILES_DIRECTORY}/${EXEC_NAME}.dir/")
+
+SET(LIBS "-lc -lkernel -lc++")
+
+include_directories(SYSTEM ${TOOLCHAIN}/include ${TOOLCHAIN}/include/c++/v1)
+include_directories(include )
+set(SOURCES
+    #python: import os; result = '\n'.join([' ' * 4 + 'source/' + file for file in os.listdir('source/')])
+) 
+
+add_executable(${EXEC_NAME} ${SOURCES})
+SET(OBJ_FILES 
+    #python: import os; result = '\n'.join([' ' * 4 + '${EXEC_DIR}source/' + file + '.o' for file in os.listdir('source/')])
+)
+SET(LD_INIT_FLAGS "${OBJ_FILES} -o ${EXEC_NAME} ")
+SET(LD_FLAGS "-v -m elf_x86_64 -pie --script ${TOOLCHAIN}/link.x --eh-frame-hdr -L${TOOLCHAIN}/lib ${LIBS} ${TOOLCHAIN}/lib/crt1.o")
+SET(CMAKE_C_LINK_EXECUTABLE "/usr/bin/ld.lld ${LD_INIT_FLAGS} ${LD_FLAGS}")
+SET(CMAKE_CXX_LINK_EXECUTABLE "/usr/bin/ld.lld ${LD_INIT_FLAGS} ${LD_FLAGS}")
