@@ -23,7 +23,7 @@ include_directories(include)
 set(SOURCES <py:dofile('get_sources'):py>) 
 
 add_executable(${EXEC_NAME} ${SOURCES})
-SET(OBJ_FILES "<py:import os; ' '.join(['${EXEC_DIR}source/' + file + '.o' for file in os.listdir('source/')]):py>")
+SET(OBJ_FILES "<py:dofile("get_objects"):py>")
 SET(LD_INIT_FLAGS "${OBJ_FILES} -o ${EXEC_NAME}")
 SET(LD_FLAGS "-v -m elf_x86_64 -pie --script ${TOOLCHAIN}/link.x --eh-frame-hdr -L${TOOLCHAIN}/lib ${LIBS} ${TOOLCHAIN}/lib/crt1.o")
 SET(CMAKE_C_LINK_EXECUTABLE "/usr/bin/ld.lld ${LD_INIT_FLAGS} ${LD_FLAGS}")
