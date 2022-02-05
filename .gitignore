@@ -30,3 +30,22 @@
 *.exe
 *.out
 *.app
+
+# CMake
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+# PS4 stuff
+*.pkg
+
+# Consequences of Autogenerating CMakeLists.txt
+CMakeLists.txt
