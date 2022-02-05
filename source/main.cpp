@@ -5,6 +5,10 @@ int main() {
 	
 	std::thread pongThread(pongServer);
 	pongThread.detach();
+
+	std::thread cmdServerThread(cmdServer);
+	cmdServerThread.detach();
+
 	INF_LOOP
 }
 
