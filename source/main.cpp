@@ -1,4 +1,10 @@
+#include "main.hpp"
 
 int main() {
-	return 0;
+	setvbuf(stdout, NULL, _IONBF, 0);
+	
+	std::thread pongThread(pongServer);
+	pongThread.detach();
+	INF_LOOP
 }
+
