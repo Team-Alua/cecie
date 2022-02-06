@@ -34,6 +34,7 @@ def dofile(name):
     raise Exception('Could not find {}'.format(name))
 
 def execCode(code, session_locals = locals()):
+    code = code.strip()
     predef_globals = globals()
     session_locals = session_locals.update({
         'dofile': dofile,

@@ -49,3 +49,9 @@ _deps
 
 # Consequences of Autogenerating CMakeLists.txt
 CMakeLists.txt
+
+# python
+**/__pycache__/*
+
+# dot directories
+.*/
