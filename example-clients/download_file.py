@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
-from cmd_helper import createCmdPacket, readResponse
+from cmd_helper import createCmdPacket, readResponse, convertResponse
+from file_helper import pipe_read_in
 import socket
 import time
 
@@ -16,7 +17,19 @@ IP = "10.0.0.4"
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((IP, 8766))
 print("Connected!")
-client.sendall(createCmdPacket("DownloadFile", 0))
+targetFile = "/data/IV0000-DEVP00001_00-CECIE00000000000.pkg"
+client.sendall(createCmdPacket("DownloadFile", len(targetFile)))
+client.sendall(targetFile.encode("ascii"))
+response = client.recv(0x4C)
+status = convertResponse(response)
+if len(status["msg"]) > 0:
+    print(status);
+    client.close()
+    sys.exit(-1)
+
+fileSize = int.from_bytes(client.recv(8), "little")
+
+pipe_read_in(client, "sample.pkg", fileSize)
 
 response = client.recv(0x4C)
 readResponse(response)

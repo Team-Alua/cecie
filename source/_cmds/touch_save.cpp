@@ -5,7 +5,6 @@
 
 #include <orbis/SaveData.h>
 
-
 #include "cmd_common.hpp"
 #include "cmd_list.hpp"
 #include "common.hpp"
@@ -18,17 +17,13 @@ struct __attribute__ ((packed)) TouchSavePacket {
 	uint64_t saveBlocks;
 };
 
-bool touch_save(int connfd, cmd_args & args) {
-
-	struct cmd_response response;
-	memset(&response, 0, sizeof(cmd_response));
-
+int touch_save(int connfd, cmd_args & args) {
 	TouchSavePacket packet;
 	memset(&packet, 0, sizeof(TouchSavePacket));
 
 	int bytesRead = readFull<TouchSavePacket>(connfd, &packet);
 	if (bytesRead <= 0) {
-		return false;
+		return CMD_FAILED;
 	}
 	log("dirName: %s titleId: %s fingerprint: %s saveBlocks: %lu",packet.dirName,
 								      packet.titleId,
@@ -52,13 +47,14 @@ bool touch_save(int connfd, cmd_args & args) {
 	
 	int mResult = sceSaveDataMount(&mount, &mountResult);
 	if (mResult < 0) {
+		char msg[64]; 
+		memset(&msg, 0, sizeof(msg));
 
-		sprintf(response.msg, "Failed to mount %s for %s", packet.dirName, packet.titleId); 
-		response.type = CMD_RESPONSE_ERROR;
-		response.errorCode2 = mResult;
+		sprintf(msg, "Failed to mount %s for %s", packet.dirName, packet.titleId); 
+		sendResponse(connfd, msg, CMD_RESPONSE_ERROR, 0, mResult);
 
 		log("There was an issue mount %s: 0x%04x", packet.dirName, mResult);
-		return false;
+		return CMD_FAILED;
 	}
 
 	OrbisSaveDataMountPoint mp;
@@ -67,13 +63,15 @@ bool touch_save(int connfd, cmd_args & args) {
 
 	int unResult = sceSaveDataUmount(&mp);
 	if (mResult < 0) {
-		sprintf(response.msg, "Failed to unmount %s for %s", packet.dirName, packet.titleId);
-		response.type = CMD_RESPONSE_ERROR;
-		response.errorCode2 = unResult;
+		char msg[64];
+		memset(&msg, 0, sizeof(msg));
+		sprintf(msg, "Failed to unmount %s for %s", packet.dirName, packet.titleId);
+
+		sendResponse(connfd, msg, CMD_RESPONSE_ERROR, 0, unResult);
 
 		log("There was an issue unmounting %s: 0x%04x", packet.dirName, unResult);
-		return false;
+		return CMD_FAILED;
 	}
 
-	return true;
+	return CMD_SUCESS;
 }
