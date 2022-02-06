@@ -1,6 +1,6 @@
 #include "cmd_server.hpp"
 #include "cmd_list.hpp"
-
+#include "server_common.hpp"
 
 
 static void cmdClientHandler(int connfd);
@@ -68,28 +68,35 @@ static void cmdClientHandler(int connfd) {
 		struct cmd_args args;
 		memset(&args, 0, sizeof(args));
 
-		int readBytes = read(connfd, &args, sizeof(args));
+		int readBytes = readFull<cmd_args>(connfd, &args);
 		if (readBytes == 0) {
 			break;
 		} else if (readBytes < 0) {
 			break;
-		} else if (readBytes < sizeof(args)) {
+		} else if (readBytes < sizeof(cmd_args)) {
+			break;
+		} else if (readBytes > sizeof(cmd_args)) {
+			log("Received more %u instead of %u", readBytes, sizeof(cmd_args));
 			break;
 		}
 
 		log("Received name:%s argSize:%i", args.name, args.argSize);
 
+		int cmdResult = cmdHandler.call(args.name, connfd, args);
 		struct cmd_response response;
 		memset(&response, 0, sizeof(response));
-		if (cmdHandler.call(args.name, connfd, args) == false) {
+		if (cmdResult == CALL_CMD_UNKNOWN) {
 			// Command doesn't exist
 			sprintf(response.msg, "%s is not a command", args.name);
 			response.type = CMD_RESPONSE_ERROR;
 			response.errorCode1 = 0x0;
 			// While it's unlikely that this will not send 
 			// in one go, should port writeFull here
-		}
-		else {
+		} else if (cmdResult == CALL_CMD_FAILED) {
+			// Command sent their own response so do not send one
+			continue;
+		} else {
+			// Send default response
 			response.type = CMD_RESPONSE_READY;
 		}
 		write(connfd, &response, sizeof(response));

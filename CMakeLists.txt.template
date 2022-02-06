@@ -16,7 +16,7 @@ SET(EXEC_NAME "${CMAKE_PROJECT_NAME}.elf")
 
 SET(EXEC_DIR "${CMAKE_SOURCE_DIR}${CMAKE_FILES_DIRECTORY}/${EXEC_NAME}.dir/")
 
-SET(LIBS "-lc -lkernel -lc++")
+SET(LIBS "-lc -lkernel -lc++ -lSceUserService -lSceSaveData")
 
 include_directories(SYSTEM ${TOOLCHAIN}/include ${TOOLCHAIN}/include/c++/v1)
 include_directories(include)

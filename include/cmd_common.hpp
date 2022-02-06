@@ -25,6 +25,7 @@ struct cmd_response {
     uint32_t errorCode2; // Any other error code
 };
 
-typedef void (*cmd_function)(int connfd, cmd_args & args);
+typedef bool (*cmd_function)(int connfd, cmd_args & args);
 
+int32_t getUserId();
 

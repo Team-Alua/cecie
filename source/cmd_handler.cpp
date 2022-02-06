@@ -4,13 +4,12 @@ void CommandHandler::add(std::string name, cmd_function func) {
 	cmds[name] = func;
 }
 
-bool CommandHandler::call(std::string name, int connfd, cmd_args & args) {
+int CommandHandler::call(std::string name, int connfd, cmd_args & args) {
 	auto entry = cmds.find(name);
 	if (entry == cmds.end()) {
-		return false;
+		return CALL_CMD_UNKNOWN;
 	}
-	entry->second(connfd, args);
-	return true;
+	return entry->second(connfd, args) ? CALL_CMD_SUCESS : CALL_CMD_FAILED;
 }
 
 //seg:cmd_init
