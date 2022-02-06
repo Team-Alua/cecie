@@ -29,8 +29,9 @@ file_format = r"""
 #include "cmd_list.hpp"
 #include "common.hpp"
 
-bool {}(int connfd, cmd_args & args) {{
+int {}(int connfd, cmd_args & args) {{
 {tab}log("{} was called!"); 
+{tab}return true;
 }}
 """.lstrip()
 with open('source/_cmds/{}.cpp'.format(cmd_name), 'w') as cmdFile:
@@ -45,7 +46,7 @@ lines = [
 ]
 cmds_list = [cmd.replace(".cpp", "") for cmd in cmds]
 
-lines += ["bool {}(int connfd, cmd_args & args);".format(cmd) for cmd in cmds_list]
+lines += ["int {}(int connfd, cmd_args & args);".format(cmd) for cmd in cmds_list]
 lines += [''];
 
 cmd_list = '\n'.join(lines)

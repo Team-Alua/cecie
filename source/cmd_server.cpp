@@ -80,21 +80,24 @@ static void cmdClientHandler(int connfd) {
 			break;
 		}
 
-		log("Received name:%s argSize:%i", args.name, args.argSize);
+		log("Received name:%s args: %lx %lx %lx %lx", args.name, args.arg1, args.arg2, args.arg3, args.arg4);
 
 		int cmdResult = cmdHandler.call(args.name, connfd, args);
 		struct cmd_response response;
 		memset(&response, 0, sizeof(response));
-		if (cmdResult == CALL_CMD_UNKNOWN) {
+		if (cmdResult == CMD_UNKNOWN) {
 			// Command doesn't exist
 			sprintf(response.msg, "%s is not a command", args.name);
 			response.type = CMD_RESPONSE_ERROR;
 			response.errorCode1 = 0x0;
 			// While it's unlikely that this will not send 
 			// in one go, should port writeFull here
-		} else if (cmdResult == CALL_CMD_FAILED) {
+		} else if (cmdResult == CMD_FAILED) {
 			// Command sent their own response so do not send one
 			continue;
+		} else if (cmdResult == CMD_FATAL) {
+			// Something bad happen
+			break;
 		} else {
 			// Send default response
 			response.type = CMD_RESPONSE_READY;
