@@ -16,4 +16,5 @@ int CommandHandler::call(std::string name, int connfd, cmd_args & args) {
 
 void cmd_init(CommandHandler & handler) {
 	handler.add("TouchSave", touch_save);
+	handler.add("DownloadFile", download_file);
 }
