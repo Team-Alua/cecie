@@ -31,6 +31,7 @@ file_format = r"""
 
 bool {}(int connfd, cmd_args & args) {{
 {tab}log("{} was called!"); 
+{tab}return true;
 }}
 """.lstrip()
 with open('source/_cmds/{}.cpp'.format(cmd_name), 'w') as cmdFile:
