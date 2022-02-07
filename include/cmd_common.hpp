@@ -10,7 +10,7 @@ const uint32_t CMD_RESPONSE_FATAL = 4;
 
 
 const int CMD_UNKNOWN = 0;
-const int CMD_SUCESS = 1;
+const int CMD_SUCCESS = 1;
 const int CMD_FAILED = 2;
 const int CMD_FATAL = 3;
 

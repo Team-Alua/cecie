@@ -64,6 +64,6 @@ int download_file(int connfd, cmd_args & args) {
 		return CMD_FATAL;
 	}
 
-	return CMD_SUCESS;
+	return CMD_SUCCESS;
 }
 
