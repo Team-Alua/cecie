@@ -78,3 +78,37 @@ int sendResponse(int connfd, const char * msg, uint32_t type, uint32_t err1, uin
 	return sendFull(connfd, &response, sizeof(cmd_response));
 }
 
+size_t downloadFile(int connfd, int fd, size_t fileSize) {
+
+	uint8_t buffer[8192];
+
+	uint32_t bytesRemaining = fileSize;
+
+	do {
+		// No more to download
+		if (bytesRemaining == 0) {
+			break;
+		}
+
+		size_t fileBufSize = 8192;
+		if (bytesRemaining < fileBufSize) {
+			fileBufSize = bytesRemaining;
+		}
+
+		ssize_t received = readFull(connfd, buffer, fileBufSize);
+		// Error reading
+		if (received <= 0) {
+			return received;
+		}
+
+		size_t fileOffset = fileSize - bytesRemaining;
+		ssize_t writeStatus = pwrite(fd, buffer, received, fileOffset);
+		if (writeStatus == -1) {
+			return -1;
+		}
+		bytesRemaining -= received;
+	} while(true);
+
+	// Return amount downloaded
+	return fileSize - bytesRemaining;
+}
