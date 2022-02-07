@@ -20,5 +20,6 @@ void cmd_init(CommandHandler & handler) {
 	handler.add("DeleteFile", delete_file);
 	handler.add("MountSave", mount_save);
 	handler.add("DownloadFile", download_file);
+	handler.add("DeleteSave", delete_save);
 	handler.add("UnmountSave", unmount_save);
 }
