@@ -33,3 +33,4 @@ int sendFile(int connfd, int fd, size_t size);
 
 int sendFull(int connfd, void * buffer, size_t size);
 
+size_t downloadFile(int connfd, int fd, size_t fileSize);
