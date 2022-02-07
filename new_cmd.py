@@ -31,12 +31,37 @@ file_format = r"""
 
 int {}(int connfd, cmd_args & args) {{
 {tab}log("{} was called!"); 
-{tab}return true;
+{tab}return CMD_SUCCESS;
 }}
 """.lstrip()
+cmdNameTitled = cmdNameToTitleCase(cmd_name)
 with open('source/_cmds/{}.cpp'.format(cmd_name), 'w') as cmdFile:
-    code = file_format.format(cmd_name, cmdNameToTitleCase(cmd_name),tab="\t")
+    code = file_format.format(cmd_name, cmdNameTitled,tab="\t")
     cmdFile.write(code)
+
+
+python_client_sample = r"""
+#!/usr/bin/python3
+
+from cmd_helper import createCmdPacket, readResponse
+import socket
+import time
+
+IP = "10.0.0.4"
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect((IP, 8766))                                                           
+print("Connected!")
+client.sendall(createCmdPacket("{}"))
+
+response = client.recv(0x4C)
+readResponse(response)
+client.close()                                                                       
+""".strip()
+
+
+with open('example-clients/{}.py'.format(cmd_name), 'w') as clientFile:
+    clientFile.write(python_client_sample.format(cmdNameTitled))
+
 
 cmds = os.listdir('source/_cmds/')
 lines = [
