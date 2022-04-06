@@ -1,7 +1,15 @@
-#include "main.hpp"
+#include <string.h>
+#include <stdio.h>
+
+#include <thread>
+
 #include <orbis/libkernel.h>
 #include <orbis/UserService.h>
 #include <orbis/SaveData.h>
+
+#include "log.hpp"
+#include "pong.hpp"
+#include "server.hpp"
 
 int initModules() {
 	OrbisUserServiceInitializeParams params;
@@ -41,21 +49,24 @@ int main() {
 		if (initModules() != 0) {
 			break;
 		}
+		system_notification("Initialized all necessary modules.");
 		if (resolveDynamicLinks() != 0) {
 			break;
 		}
+		system_notification("Resolved all needed dynamic links.");
 		if (!jailbreak()) {
 			log("Failed to escape sandbox");
 			break;
 		}
-		log("Ready to initiate server threads.");
+		log("Broke out of jail.");
 		std::thread pongThread(pongServer);
 		pongThread.detach();
-	
+
 		std::thread cmdServerThread(cmdServer);
 		cmdServerThread.detach();
+		INF_LOOP
 	} while(0);
-
+	system_notification("Something went wrong. Try restarting.");
 	INF_LOOP
 }
 

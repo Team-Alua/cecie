@@ -1,5 +1,15 @@
+#include <unistd.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+
+#include <thread>
+
+#include <orbis/libkernel.h>
+
 #include "pong.hpp"
-#include "common.hpp"
+#include "log.hpp"
+
 static void pongClientHandler(int connfd);
 
 void pongServer() {
@@ -26,16 +36,19 @@ void pongServer() {
 	serverAddr.sin_port = htons(PONG_PORT); // TODO: Do not hardcode this
 	
 	log("About to bind.");
+	system_notification("pong server attempting to bind.");
 	// Repeat until it does bind
 	while (bind(sockfd, (struct sockaddr*)&serverAddr, sizeof(serverAddr)) != 0) {
 	}
 	log("Binded to port.");
 	if (listen(sockfd, 5) != 0) {
+		system_notification("pong server failed to listen.");
 		log("Failed to listen: %lx", errno);
 		// Provide error here
 		return;
 	}
 
+	system_notification("pong server waiting for clients...");
 
 	addrLen = sizeof(clientAddr);
 

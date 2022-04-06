@@ -5,10 +5,8 @@
 #include <unistd.h>
 #include <stdint.h>
 
-int sendResponse(int connfd, const char * msg, uint32_t type, uint32_t err1, uint32_t err2);
-
 template<class S>
-int readFull(int connfd, S * serialized) {
+ssize_t readFull(int connfd, S * serialized) {
 	size_t offset = 0;
 	size_t size = sizeof(S);
 	while (size > 0) {
@@ -27,10 +25,12 @@ int readFull(int connfd, S * serialized) {
 	return offset;
 }
 
-int readFull(int connfd, void * buffer, size_t size);
+ssize_t readFull(int connfd, void * buffer, size_t size);
 
-int sendFile(int connfd, int fd, size_t size); 
 
-int sendFull(int connfd, void * buffer, size_t size);
+ssize_t sendFull(int connfd, void * buffer, size_t size);
 
-size_t downloadFile(int connfd, int fd, size_t fileSize);
+ssize_t uploadFile(int connfd, int fd, size_t size);
+
+ssize_t downloadFile(int connfd, int fd, size_t fileSize);
+

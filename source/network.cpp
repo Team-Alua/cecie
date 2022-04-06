@@ -1,7 +1,6 @@
-#include "cmd_common.hpp"
-#include "server_common.hpp" 
+#include "network.hpp" 
 
-int readFull(int connfd, void * buffer, size_t size) {
+ssize_t readFull(int connfd, void * buffer, size_t size) {
 	size_t offset = 0;
 	while (size > 0) {
 		char * data = (char*)buffer + offset;
@@ -19,7 +18,7 @@ int readFull(int connfd, void * buffer, size_t size) {
 	return offset;
 }
 
-int sendFile(int connfd, int fd, size_t size) {
+ssize_t uploadFile(int connfd, int fd, size_t size) {
 	unsigned char buffer[4096];
 	while (size > 0) {
 		size_t bufferRead = size < 4096ul ? size: 4096ul;
@@ -48,7 +47,7 @@ int sendFile(int connfd, int fd, size_t size) {
 	return 1;
 }
 
-int sendFull(int connfd, void * buffer, size_t size) {
+ssize_t sendFull(int connfd, void * buffer, size_t size) {
 	size_t offset = 0;
 	while (size > 0) {
 		char * data = (char*)buffer + offset;
@@ -67,18 +66,7 @@ int sendFull(int connfd, void * buffer, size_t size) {
 	return offset;
 }
 
-int sendResponse(int connfd, const char * msg, uint32_t type, uint32_t err1, uint32_t err2) {
-	struct cmd_response response;
-	memset(&response, 0, sizeof(cmd_response));
-	strcpy(response.msg, msg);
-	response.type = type;
-	response.errorCode1 = err1;
-	response.errorCode2 = err2;
-	
-	return sendFull(connfd, &response, sizeof(cmd_response));
-}
-
-size_t downloadFile(int connfd, int fd, size_t fileSize) {
+ssize_t downloadFile(int connfd, int fd, size_t fileSize) {
 
 	uint8_t buffer[8192];
 
@@ -112,3 +100,4 @@ size_t downloadFile(int connfd, int fd, size_t fileSize) {
 	// Return amount downloaded
 	return fileSize - bytesRemaining;
 }
+
