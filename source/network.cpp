@@ -1,6 +1,6 @@
 #include "network.hpp" 
 
-ssize_t readFull(int connfd, void * buffer, size_t size) {
+ssize_t Network::readFull(void * buffer, size_t size) {
 	size_t offset = 0;
 	while (size > 0) {
 		char * data = (char*)buffer + offset;
@@ -18,7 +18,7 @@ ssize_t readFull(int connfd, void * buffer, size_t size) {
 	return offset;
 }
 
-ssize_t uploadFile(int connfd, int fd, size_t size) {
+ssize_t Network::uploadFile(int fd, size_t size) {
 	unsigned char buffer[4096];
 	while (size > 0) {
 		size_t bufferRead = size < 4096ul ? size: 4096ul;
@@ -47,7 +47,7 @@ ssize_t uploadFile(int connfd, int fd, size_t size) {
 	return 1;
 }
 
-ssize_t sendFull(int connfd, void * buffer, size_t size) {
+ssize_t Network::writeFull(void * buffer, size_t size) {
 	size_t offset = 0;
 	while (size > 0) {
 		char * data = (char*)buffer + offset;
@@ -66,7 +66,7 @@ ssize_t sendFull(int connfd, void * buffer, size_t size) {
 	return offset;
 }
 
-ssize_t downloadFile(int connfd, int fd, size_t fileSize) {
+ssize_t Network::downloadFile(int fd, size_t fileSize) {
 
 	uint8_t buffer[8192];
 
@@ -83,7 +83,7 @@ ssize_t downloadFile(int connfd, int fd, size_t fileSize) {
 			fileBufSize = bytesRemaining;
 		}
 
-		ssize_t received = readFull(connfd, buffer, fileBufSize);
+		ssize_t received = this->readFull(buffer, fileBufSize);
 		// Error reading
 		if (received <= 0) {
 			return received;

@@ -7,6 +7,7 @@ struct ClientSession {
 	char titleId[16];
 	char dirName[32];
 	uint64_t saveBlocks;
+	char mountPath[16];
 	bool reserved;
 };
 
