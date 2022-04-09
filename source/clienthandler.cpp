@@ -19,6 +19,7 @@ void clientHandler(int connfd, Sessions * sessions) {
 			log("No command set was found. Terminating loop.");
 			break;
 		}
+		log("Command Set %s is active.", setPtr->Name());
 		char commandName[32];
 		auto result = network.readFull(&commandName); 
 		if (result == 0) {
@@ -31,12 +32,13 @@ void clientHandler(int connfd, Sessions * sessions) {
 			continue;
 		}
 		auto cmd = setPtr->Get(commandName);
-		
 		if (cmd == NULL) {
 			log("User supplied invalid command %s.", commandName);
 			network.sendResponse("invalid.cmd");
 			continue;
 		}
+		network.sendResponse("ok");
+		log("Executing cmd %s.", commandName);
 		cmd->Execute(network, sessionIndex, *sessions);
 	}
 	if (sessionIndex >= 0) {

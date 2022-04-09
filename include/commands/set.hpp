@@ -7,10 +7,12 @@
 
 class CommandSet {
 protected:
-	std::unordered_map<const char *, Command*> cmds;
+	std::unordered_map<std::string, Command*> cmds;
 
 public:
 	virtual void Initialize() = 0;
+
+	virtual const char * Name() = 0;
 
 	Command* Get(const char * cmdName);
 

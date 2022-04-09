@@ -6,6 +6,8 @@
 
 #include "orbis/_types/save_data.h"
 
+#include "log.hpp"
+
 struct ReserveSaveContainerPacket {
 	char titleId[16];
 	char dirName[32];
@@ -19,13 +21,13 @@ bool isValidTitleId(const char * titleId) {
 			return false;
 		}
 	}
-	for(int i = 4; i < 10; i++) {
+	for(int i = 4; i < 9; i++) {
 		char number = titleId[i];
 		if (number < '0' || number > '9') {
 			return false;
 		} 
 	}
-	for(int i = 10; i < 16;i++) {
+	for(int i = 9; i < 16;i++) {
 		if (titleId[i] != 0) {
 			return false;
 		}

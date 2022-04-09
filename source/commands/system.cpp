@@ -7,10 +7,17 @@ CommandSystem::CommandSystem() {
 } 
 
 void CommandSystem::Initialize() {
+	
 	this->AddCommandSet(CommandSystemStates::ReserveLoop, &reserveSet);
 	this->ChangeToCommandSet(CommandSystemStates::ReserveLoop);
 	this->AddCommandSet(CommandSystemStates::MainLoop, &mainSet);
 	this->AddCommandSet(CommandSystemStates::ModifyLoop, &modifySet);
+
+	for(auto it = comSets.begin(); it != comSets.end(); ++it) {
+		auto commandSet = it->second;
+		commandSet->Initialize();
+	}
+
 
 	phaseEventSystem.AddEventListener([](Event& e, void * instance) {
 		auto cs = ((CommandSystem *) instance);
@@ -19,9 +26,12 @@ void CommandSystem::Initialize() {
 			cs->MarkFinished();
 			return;
 		}
+
 		cs->ChangeToCommandSet(state);
 	}, this);
+
 	this->AddEventPublishers(&phaseEventSystem);
+
 }
 
 

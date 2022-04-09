@@ -4,3 +4,7 @@ void ModifySet::Initialize() {
 
 }
 
+const char * ModifySet::Name() {
+	return "ModifySet";
+}
+

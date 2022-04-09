@@ -9,4 +9,7 @@ private:
 
 public:
 	virtual void Initialize() override;
+
+	virtual const char * Name() override;
+
 };
