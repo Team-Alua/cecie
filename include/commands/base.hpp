@@ -15,5 +15,12 @@ public:
 	void AddEventSystem(CommandEventSystem & newEventSystem);
 
 	void Notify(Event& e);
+
+	template<class S>
+	void Notify(const char * evtName, S * serialized) {
+		for(auto it = eventSystems.begin(); it != eventSystems.end(); ++it) {
+			(*it).Notify(evtName, serialized);
+		}
+	}
 };
 

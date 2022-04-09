@@ -23,6 +23,15 @@ public:
 
 	void Notify(Event& event);
 
+
+	template<class S>
+	void Notify(const char * evtName, S * serialized) {
+		Event e;
+		e.name = evtName;
+		e.value = serialized;
+		this->Notify(e);
+	}
+
 	const char * EventName();
 };
 

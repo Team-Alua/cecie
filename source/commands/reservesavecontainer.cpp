@@ -38,11 +38,8 @@ void ReserveSaveContainerCommand::Execute(Network & network, int & sessionIndex,
 	while(sessionIndex < 0) {
 		ssize_t result = network.readFull(&packet);
 		if (result <= 0) {
-			Event e;
-			e.name = "PhaseChangeEvent";
 			CommandSystemStates state = CommandSystemStates::Done;
-			e.value = (void*)&state;
-			this->Notify(e);
+			this->Notify("PhaseChangeEvent", &state);
 			return;
 		}
 
@@ -73,19 +70,11 @@ void ReserveSaveContainerCommand::Execute(Network & network, int & sessionIndex,
 	}
 
 	if (sessionIndex >= 0) {
-		Event e;
-		e.name = "PhaseChangeEvent";
 		CommandSystemStates state = CommandSystemStates::MainLoop;
-		e.value = (void*)&state;
-		this->Notify(e);
-		return;
+		this->Notify("PhaseChangeEvent", &state);
 	} else {
-		Event e;
-		e.name = "PhaseChangeEvent";
 		CommandSystemStates state = CommandSystemStates::Done;
-		e.value = (void*)&state;
-		this->Notify(e);
-		return;
+		this->Notify("PhaseChangeEvent", &state);
 	}
 }
 

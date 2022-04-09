@@ -34,6 +34,9 @@ void clientHandler(int connfd, Sessions * sessions) {
 		}
 		cmd->Execute(network, sessionIndex, *sessions);
 	}
+	if (sessionIndex >= 0) {
+		// do cleanup
+	}
 	close(connfd);
 }
 
