@@ -20,8 +20,13 @@ void clientHandler(int connfd, Sessions * sessions) {
 			break;
 		}
 		char commandName[32];
-		if (network.readFull(&commandName) <= 0) {
-			log("Error occured or client disconnected.");
+		auto result = network.readFull(&commandName); 
+		if (result == 0) {
+			log("Client disconnected.");
+			commandSystem.MarkFinished();
+			continue;
+		} else if (result < 0) {
+			log("There was an error %d.", errno);
 			commandSystem.MarkFinished();
 			continue;
 		}

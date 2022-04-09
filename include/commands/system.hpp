@@ -12,6 +12,8 @@
 #include "commands/mainset.hpp"
 #include "commands/modifyset.hpp"
 
+#include "commands/events/names.hpp"
+
 class CommandSystem {
 private:
 	std::unordered_map<CommandSystemStates, CommandSet*> comSets;

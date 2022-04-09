@@ -3,7 +3,7 @@
 #include "commands/system.hpp"
 
 CommandSystem::CommandSystem() {
-	phaseEventSystem = CommandEventSystem("PhaseChangeEvent");
+	phaseEventSystem = CommandEventSystem(EventNamePhaseChange);
 } 
 
 void CommandSystem::Initialize() {
