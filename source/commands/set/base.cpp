@@ -1,4 +1,4 @@
-#include "commands/set.hpp"
+#include "commands/set/base.hpp"
 
 void CommandSet::AddEventSystem(CommandEventSystem * eventSystem) {
 	for(auto it = cmds.begin(); it != cmds.end(); it++) {

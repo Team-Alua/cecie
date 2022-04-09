@@ -1,4 +1,4 @@
-#include "commands/modifyset.hpp"
+#include "commands/set/modify.hpp"
 
 void ModifySet::Initialize() {
 

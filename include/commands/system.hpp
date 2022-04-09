@@ -3,14 +3,14 @@
 #include <unordered_map>
 #include <string>
 
-#include "commands/set.hpp"
+#include "commands/set/base.hpp"
 #include "commands/events/basesystem.hpp"
 
 #include "commands/events/phases.hpp"
 
-#include "commands/reserveset.hpp"
-#include "commands/mainset.hpp"
-#include "commands/modifyset.hpp"
+#include "commands/set/reserve.hpp"
+#include "commands/set/main.hpp"
+#include "commands/set/modify.hpp"
 
 #include "commands/events/names.hpp"
 

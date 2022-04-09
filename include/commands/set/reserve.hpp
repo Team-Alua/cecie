@@ -1,7 +1,7 @@
 #pragma once
 
-#include "commands/set.hpp"
-#include "commands/reservesavecontainer.hpp"
+#include "commands/set/base.hpp"
+#include "commands/savecontainer/reserve.hpp"
 
 class ReserveSet : public CommandSet {
 private:

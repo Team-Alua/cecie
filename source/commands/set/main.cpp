@@ -1,4 +1,4 @@
-#include "commands/mainset.hpp"
+#include "commands/set/main.hpp"
 
 void MainSet::Initialize() {
 }

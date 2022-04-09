@@ -1,11 +1,12 @@
 #pragma once
 
-#include "commands/set.hpp"
+#include "commands/set/base.hpp"
 
-class ModifySet : public CommandSet {
+class MainSet : public CommandSet {
 
 public:
 	virtual void Initialize() override;
 
 	virtual const char * Name() override;
+
 };
