@@ -1,5 +1,7 @@
 #include "commands/events/basesystem.hpp"
 
+#include "log.hpp"
+
 void CommandEventSystem::AddEventListener(EventCallback cb, void * instance) {
 	EventCallbackPair pair;
 	pair.cb = cb;
@@ -17,6 +19,7 @@ void CommandEventSystem::OnNotify(Event& event) {
 
 void CommandEventSystem::Notify(Event& event) {
 	if (strcmp(event.name, eventName) == 0) {
+		log("Event %s was called.", event.name);
 		this->OnNotify(event);
 	}
 }

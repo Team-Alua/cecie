@@ -2,6 +2,7 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include <signal.h>
 
 #include <thread>
 
@@ -13,6 +14,9 @@
 static void pongClientHandler(int connfd);
 
 void pongServer() {
+	// Prevent SIGPIPE error
+	signal(SIGPIPE, SIG_IGN);
+
 	log("Inside of pongServer");
 	int sockfd;
 	int connfd;

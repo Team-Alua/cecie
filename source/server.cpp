@@ -1,10 +1,15 @@
+#include <signal.h>
+
 #include "log.hpp"
 #include "server.hpp"
 #include "sessions.hpp"
 #include "network.hpp"
 #include "clienthandler.hpp"
 
+
 void cmdServer() {
+	// Prevent error when socket closed
+	signal(SIGPIPE, SIG_IGN);
 
 	log("Inside of cmdServer");
 	int sockfd;
