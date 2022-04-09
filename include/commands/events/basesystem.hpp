@@ -12,14 +12,17 @@ protected:
 
 	void OnNotify(Event& event);
 
-	const char * name;
+	const char * eventName;
 public:
-	CommandEventSystem(): name("") {}
 
-	CommandEventSystem(const char * eventName): name(eventName) {}
+	CommandEventSystem(): eventName("") {}
+
+	CommandEventSystem(const char * evtName): eventName(evtName) {}
 
 	void AddEventListener(EventCallback cb, void * instance);
 
 	void Notify(Event& event);
+
+	const char * EventName();
 };
 

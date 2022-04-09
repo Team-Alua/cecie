@@ -1,3 +1,5 @@
+#include "log.hpp"
+
 #include "commands/system.hpp"
 
 CommandSystem::CommandSystem() {
@@ -5,35 +7,48 @@ CommandSystem::CommandSystem() {
 } 
 
 void CommandSystem::Initialize() {
-	phaseEventSystem.AddEventListener([](Event& e, void * instance) {
-		if (strcmp(e.name, "PhaseChangeEvent") == 0) {
-			auto cs = ((CommandSystem *) instance);
-			cs->ChangeToCommandSet((const char *)e.value);
-		}
-	}, this);
+	this->AddCommandSet(CommandSystemStates::ReserveLoop, &reserveSet);
+	this->ChangeToCommandSet(CommandSystemStates::ReserveLoop);
+	this->AddCommandSet(CommandSystemStates::MainLoop, &mainSet);
+	this->AddCommandSet(CommandSystemStates::ModifyLoop, &modifySet);
 
+	phaseEventSystem.AddEventListener([](Event& e, void * instance) {
+		auto cs = ((CommandSystem *) instance);
+		auto state = *(CommandSystemStates*)e.value;
+		if (state == CommandSystemStates::Done) {
+			cs->finished = true;
+			return;
+		}
+		cs->ChangeToCommandSet(state);
+	}, this);
 	this->AddEventPublishers(&phaseEventSystem);
 }
+
 
 void CommandSystem::AddEventPublishers(CommandEventSystem * eventSystem) {
 	for(auto it = comSets.begin(); it != comSets.end(); ++it) {
 		auto commandSet = it->second;
 		commandSet->AddEventSystem(eventSystem);
 	}
+	log("Registered command event system for event %s", eventSystem->EventName());
 }
 
-void CommandSystem::AddCommandSet(const char * name, CommandSet * cSet) {
-	comSets[name] = cSet;
+void CommandSystem::AddCommandSet(CommandSystemStates state, CommandSet * cSet) {
+	comSets[state] = cSet;
 }
 
-void CommandSystem::ChangeToCommandSet(const char * name) {
-	if (comSets.find(name) != comSets.end()) {
-		currSet = comSets.at(name);
+void CommandSystem::ChangeToCommandSet(CommandSystemStates state) {
+	if (comSets.find(state) != comSets.end()) {
+		currSet = comSets.at(state);
 	}
 }
 
 
 CommandSet * CommandSystem::GetCommandSet() {
 	return currSet;
+}
+
+bool CommandSystem::Finished() {
+	return finished;
 }
 

@@ -16,5 +16,13 @@ void CommandEventSystem::OnNotify(Event& event) {
 }
 
 void CommandEventSystem::Notify(Event& event) {
-	this->OnNotify(event);
+	if (strcmp(event.name, eventName) == 0) {
+		this->OnNotify(event);
+	}
 }
+
+
+const char * CommandEventSystem::EventName() {
+	return eventName;
+}
+
