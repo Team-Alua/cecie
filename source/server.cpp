@@ -2,8 +2,7 @@
 #include "server.hpp"
 #include "sessions.hpp"
 #include "network.hpp"
-
-static void clientHandler(int connfd, Sessions *);
+#include "clienthandler.hpp"
 
 void cmdServer() {
 
@@ -28,7 +27,7 @@ void cmdServer() {
 	memset(&serverAddr, 0, sizeof(serverAddr));
 	serverAddr.sin_family = AF_INET;
 	serverAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	serverAddr.sin_port = htons(CMD_SERVER_PORT); // TODO: Do not hardcode this
+	serverAddr.sin_port = htons(CMD_SERVER_PORT);
 	
 	log("About to bind.");
 	system_notification("cmd server starting binding attempts.");
@@ -62,11 +61,3 @@ void cmdServer() {
 	close(sockfd);
 }
 
-static void clientHandler(int connfd, Sessions * sessions) {
-	
-	int sessionIndex = -1;
-	while(true) {
-		break;
-	}
-	close(connfd);
-}
