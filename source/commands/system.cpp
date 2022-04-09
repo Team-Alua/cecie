@@ -16,7 +16,7 @@ void CommandSystem::Initialize() {
 		auto cs = ((CommandSystem *) instance);
 		auto state = *(CommandSystemStates*)e.value;
 		if (state == CommandSystemStates::Done) {
-			cs->finished = true;
+			cs->MarkFinished();
 			return;
 		}
 		cs->ChangeToCommandSet(state);
@@ -50,5 +50,9 @@ CommandSet * CommandSystem::GetCommandSet() {
 
 bool CommandSystem::Finished() {
 	return finished;
+}
+
+void CommandSystem::MarkFinished() {
+	finished = true;
 }
 

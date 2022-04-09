@@ -37,6 +37,8 @@ public:
 
 	CommandSet * GetCommandSet();
 
+	void MarkFinished();
+
 	bool Finished();
 };
 

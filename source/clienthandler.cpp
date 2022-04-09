@@ -2,7 +2,7 @@
 
 #include "clienthandler.hpp"
 #include "log.hpp"
-
+#include "network.hpp"
 #include "commands/system.hpp"
 
 void clientHandler(int connfd, Sessions * sessions) {
@@ -12,16 +12,27 @@ void clientHandler(int connfd, Sessions * sessions) {
 	CommandSystem commandSystem;
 	commandSystem.Initialize();
 
+	Network network(connfd);
 	while(!commandSystem.Finished()) {
 		auto setPtr = commandSystem.GetCommandSet();
 		if (setPtr == NULL) {
 			log("No command set was found. Terminating loop.");
 			break;
 		}
-
-		// Read Command Name From Network
-		auto cmd = setPtr->Get("abc");
-		cmd->Execute(connfd, sessionIndex, *sessions);
+		char commandName[32];
+		if (network.readFull(&commandName) <= 0) {
+			log("Error occured or client disconnected.");
+			commandSystem.MarkFinished();
+			continue;
+		}
+		auto cmd = setPtr->Get(commandName);
+		
+		if (cmd == NULL) {
+			log("User supplied invalid command %s.", commandName);
+			network.sendResponse("invalid.cmd");
+			continue;
+		}
+		cmd->Execute(network, sessionIndex, *sessions);
 	}
 	close(connfd);
 }

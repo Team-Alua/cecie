@@ -12,11 +12,6 @@ struct ReserveSaveContainerPacket {
 	uint64_t saveBlocks;
 };
 
-struct ReserveSaveContainerResponse {
-	char response[64];
-};
-
-
 bool isValidTitleId(const char * titleId) {
 	for(int i = 0; i < 4; i++) {
 		char letter = titleId[i];
@@ -51,25 +46,20 @@ void ReserveSaveContainerCommand::Execute(Network & network, int & sessionIndex,
 			return;
 		}
 
-		ReserveSaveContainerResponse response;
-		memset(&response, 0, sizeof(response));
 
 		if (!isValidTitleId(packet.titleId)) {
-			strcpy(response.response, "invalid.titleId");
-			network.writeFull(&response);
+			network.sendResponse("invalid.titleId");
 			continue;
 		}
 		
 		if (packet.saveBlocks < ORBIS_SAVE_DATA_BLOCKS_MIN2 || packet.saveBlocks > ORBIS_SAVE_DATA_BLOCKS_MAX) {
-			strcpy(response.response, "invalid.saveBlocks");
-			network.writeFull(&response);
+			network.sendResponse("invalid.saveBlocks");
 			continue;
 		} 
 		
 		int index = sessions.Reserve(packet.titleId, packet.dirName);
 		if(index == -1) {
-			strcpy(response.response, "reserve.tryagain");
-			network.writeFull(&response);
+			network.sendResponse("reserve.tryagain");
 			continue;
 		}
 		sessionIndex = index;
@@ -78,8 +68,7 @@ void ReserveSaveContainerCommand::Execute(Network & network, int & sessionIndex,
 		memset(clientSession->mountPath, 0, ORBIS_SAVE_DATA_MOUNT_POINT_DATA_MAXSIZE);
 
 		clientSession->saveBlocks = packet.saveBlocks;
-		strcpy(response.response, "ok");
-		network.writeFull(&response);
+		network.sendResponse("ok");
 		break;
 	}
 

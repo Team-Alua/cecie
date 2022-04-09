@@ -54,6 +54,9 @@ public:
 		return offset;
 	}
 
+
+	ssize_t sendResponse(const char * msg);
+
 	ssize_t writeFull(void * buffer, size_t size);
 
 	ssize_t uploadFile(int fd, size_t size);

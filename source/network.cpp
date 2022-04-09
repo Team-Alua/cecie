@@ -101,3 +101,9 @@ ssize_t Network::downloadFile(int fd, size_t fileSize) {
 	return fileSize - bytesRemaining;
 }
 
+ssize_t Network::sendResponse(const char * msg) {
+	int msgLength = strlen(msg);
+	write(connfd, &msgLength, sizeof(msgLength));
+	return write(connfd, msg, msgLength);
+}
+
