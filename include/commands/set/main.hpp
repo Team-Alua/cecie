@@ -5,12 +5,15 @@
 #include "commands/savecontainer/mount.hpp"
 #include "commands/savecontainer/unmount.hpp"
 #include "commands/savecontainer/dump.hpp"
+#include "commands/savecontainer/modify.hpp"
 
 class MainSet : public CommandSet {
 private:
 	MountSaveContainerCommand mountSaveContainerCommand;
 	UnmountSaveContainerCommand unmountSaveContainerCommand;
 	DumpSaveContainerCommand dumpSaveContainerCommand;
+	ModifySaveContainerCommand modifySaveContainerCommand;
+
 public:
 	virtual void Initialize() override;
 
