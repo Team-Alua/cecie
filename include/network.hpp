@@ -63,6 +63,8 @@ public:
 
 	ssize_t uploadFile(int fd, size_t size);
 
+	ssize_t downloadFile(const char * path, size_t size);
+
 	ssize_t downloadFile(int fd, size_t size);
 };
 

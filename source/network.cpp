@@ -2,6 +2,8 @@
 
 #include <fcntl.h>
 #include <sys/types.h>
+#include <stdio.h>
+#include <errno.h>
 
 ssize_t Network::readFull(void * buffer, size_t size) {
 	size_t offset = 0;
@@ -58,7 +60,11 @@ ssize_t Network::uploadFile(const char * path, size_t size) {
 
 	ssize_t result = Network::uploadFile(fd, size);
 
+	int err = errno;
+
 	close(fd);
+
+	errno = err;
 
 	return result;
 }
@@ -104,17 +110,42 @@ ssize_t Network::downloadFile(int fd, size_t fileSize) {
 		if (received <= 0) {
 			return received;
 		}
-
-		size_t fileOffset = fileSize - bytesRemaining;
-		ssize_t writeStatus = pwrite(fd, buffer, received, fileOffset);
-		if (writeStatus == -1) {
-			return -1;
+		while (received > 0) {
+			size_t fileOffset = fileSize - bytesRemaining;
+			ssize_t bytesWritten = pwrite(fd, buffer, received, fileOffset);
+			if (bytesWritten < 0) {
+				return bytesWritten;
+			}
+			if (bytesWritten == 0) {
+				break;
+			}
+			bytesRemaining -= bytesWritten;
+			received -= bytesWritten;
 		}
-		bytesRemaining -= received;
 	} while(true);
 
 	// Return amount downloaded
 	return fileSize - bytesRemaining;
+}
+
+ssize_t Network::downloadFile(const char * path, size_t size) {
+
+	int fd = open(path, O_WRONLY | O_CREAT | O_TRUNC);
+	if (fd == -1) {
+		return -1;
+	}
+
+	ssize_t result = Network::downloadFile(fd, size);
+	int err = errno;
+
+	close(fd);
+
+	if (result == -1) {
+		remove(path);
+	}
+
+	errno = err;
+	return result;
 }
 
 ssize_t Network::sendResponse(const char * msg) {
