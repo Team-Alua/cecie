@@ -7,6 +7,7 @@
 #include "commands/savecontainer/dump.hpp"
 #include "commands/savecontainer/modify.hpp"
 #include "commands/savecontainer/reset.hpp"
+#include "commands/savecontainer/listfiles.hpp"
 
 class MainSet : public CommandSet {
 private:
@@ -15,7 +16,7 @@ private:
 	DumpSaveContainerCommand dumpSaveContainerCommand;
 	ModifySaveContainerCommand modifySaveContainerCommand;
 	ResetSaveContainerCommand resetSaveContainerCommand;
-
+	ListFilesInSaveContainerCommand listFilesInSaveContainerCommand;
 public:
 	virtual void Initialize() override;
 
