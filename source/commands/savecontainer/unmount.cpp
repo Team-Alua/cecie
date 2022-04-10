@@ -21,6 +21,8 @@ void UnmountSaveContainerCommand::Execute(Network & network, int & sessionIndex,
 		sprintf(msg, "sony.error.%X", result);
 		network.sendResponse(msg);
 	} else {
+		// Reset mount path
+		memset(clientSession->mountPath, 0, sizeof(clientSession->mountPath));
 		network.sendResponse("ok");
 	}
 }
