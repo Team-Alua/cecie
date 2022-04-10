@@ -26,6 +26,7 @@ void recursiveGetFiles(const char * root, const char * relativeFolder, std::vect
 	strcpy(targetFolder, root);
 	strcat(targetFolder, relativeFolder);
 
+
 	DIR * srcDir = opendir(targetFolder);
 	struct dirent * file;
 	std::vector<std::string> folders;
@@ -49,13 +50,14 @@ void recursiveGetFiles(const char * root, const char * relativeFolder, std::vect
 
 			memset(sourcePath, 0, sizeof(sourcePath));
 			sprintf(sourcePath, "%s%s/%s", root, relativeFolder, file->d_name);
-			struct stat * buf;
-			int result = stat(sourcePath, buf);
+			struct stat buf;
+			memset(&buf, 0, sizeof(struct stat));
+			int result = stat(sourcePath, &buf);
 			if (result == -1) {
 				log("There was an issue checking size of %s - %i", sourcePath, errno);
 				continue;
 			}
-			dump.size = buf->st_size;
+			dump.size = buf.st_size;
 
 			container.push_back(dump);
 		}
@@ -69,7 +71,7 @@ void recursiveGetFiles(const char * root, const char * relativeFolder, std::vect
 
 	for(std::string folderName: folders) {
 		memset(newRelativeDirectory, 0, sizeof(newRelativeDirectory));
-		sprintf(newRelativeDirectory, "%s/%s", relativeFolder, folderName.c_str());
+		sprintf(newRelativeDirectory, "%s%s", relativeFolder, folderName.c_str());
 		recursiveGetFiles(root, newRelativeDirectory, container);
 	}
 
@@ -80,19 +82,23 @@ void DumpSaveContainerCommand::Execute(Network & network, int & sessionIndex, Se
 	if (strlen(clientSession->mountPath) == 0) {
 		network.sendResponse("dump.error.notmounted");
 		return;
+	} else {
+		network.sendResponse("ok");
 	}
 
 	char mountFolder[64];
 	memset(mountFolder, 0, sizeof(mountFolder));
 
 	// TODO: Remove hardcoded value!!
-	sprintf(mountFolder, "/mnt/sandbox/%s_000/%s/", TITLE_ID, clientSession->mountPath);
-	
+	sprintf(mountFolder, "/mnt/sandbox/%s_000%s/", TITLE_ID, clientSession->mountPath);
+
+
 	std::vector<FileDumpResponse> container;
 	recursiveGetFiles(mountFolder,"", container);
 
 
 	int32_t fileCount = container.size();
+
 
 	network.writeFull(&fileCount);
 
