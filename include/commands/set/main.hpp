@@ -8,6 +8,7 @@
 #include "commands/savecontainer/modify.hpp"
 #include "commands/savecontainer/reset.hpp"
 #include "commands/savecontainer/listfiles.hpp"
+#include "commands/savecontainer/delete.hpp"
 
 class MainSet : public CommandSet {
 private:
@@ -17,6 +18,7 @@ private:
 	ModifySaveContainerCommand modifySaveContainerCommand;
 	ResetSaveContainerCommand resetSaveContainerCommand;
 	ListFilesInSaveContainerCommand listFilesInSaveContainerCommand;
+	DeleteSaveContainerCommand deleteSaveContainerCommand;
 public:
 	virtual void Initialize() override;
 
