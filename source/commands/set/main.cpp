@@ -5,6 +5,7 @@ void MainSet::Initialize() {
 	cmds["UnmountSaveContainer"] = &unmountSaveContainerCommand;
 	cmds["DumpSaveContainer"] = &dumpSaveContainerCommand;
 	cmds["ModifySaveContainer"] = &modifySaveContainerCommand;
+	cmds["ResetSaveContainer"] = &resetSaveContainerCommand;
 }
 
 const char * MainSet::Name() {

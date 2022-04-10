@@ -88,8 +88,6 @@ void DumpSaveContainerCommand::Execute(Network & network, int & sessionIndex, Se
 
 	char mountFolder[64];
 	memset(mountFolder, 0, sizeof(mountFolder));
-
-	// TODO: Remove hardcoded value!!
 	sprintf(mountFolder, "/mnt/sandbox/%s_000%s/", TITLE_ID, clientSession->mountPath);
 
 
