@@ -1,5 +1,8 @@
 #include "network.hpp" 
 
+#include <fcntl.h>
+#include <sys/types.h>
+
 ssize_t Network::readFull(void * buffer, size_t size) {
 	size_t offset = 0;
 	while (size > 0) {
@@ -45,6 +48,19 @@ ssize_t Network::uploadFile(int fd, size_t size) {
 
 	// Success
 	return 1;
+}
+
+ssize_t Network::uploadFile(const char * path, size_t size) {
+	int fd = open(path, O_RDONLY);
+	if (fd == -1) {
+		return -1;
+	}
+
+	ssize_t result = Network::uploadFile(fd, size);
+
+	close(fd);
+
+	return result;
 }
 
 ssize_t Network::writeFull(void * buffer, size_t size) {

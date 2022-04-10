@@ -38,6 +38,7 @@ int Sessions::Reserve(const char * titleId, const char * dirName) {
 		}
 		for(int i = 0; i < MAX_CLIENT_SESSIONS; i++) {
 			if (!sessions[i].reserved) {
+				memset(&sessions[i], 0, sizeof(ClientSession));
 				sessions[i].reserved = true;
 				strcpy(sessions[i].titleId, titleId);
 				strcpy(sessions[i].dirName, dirName);

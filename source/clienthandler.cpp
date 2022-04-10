@@ -5,6 +5,8 @@
 #include "network.hpp"
 #include "commands/system.hpp"
 
+#include "orbis/SaveData.h"
+
 void clientHandler(int connfd, Sessions * sessions) {
 	
 	int sessionIndex = -1;
@@ -42,6 +44,17 @@ void clientHandler(int connfd, Sessions * sessions) {
 		cmd->Execute(network, sessionIndex, *sessions);
 	}
 	if (sessionIndex >= 0) {
+		if (sessionIndex > -1) {
+			ClientSession * clientSession = sessions->Get(sessionIndex);
+			if (strlen(clientSession->mountPath) > 0) {
+				OrbisSaveDataMountPoint mp;
+				memset(&mp, 0, sizeof(mp));
+				strcpy(mp.data, clientSession->mountPath);
+				sceSaveDataUmount(&mp);
+			}
+		}
+
+		
 		log("Freeing %i", sessionIndex);
 		sessions->Free(sessionIndex);
 	}

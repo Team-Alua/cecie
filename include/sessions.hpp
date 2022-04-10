@@ -4,8 +4,8 @@
 #include <mutex>
 
 struct ClientSession {
-	char titleId[16];
-	char dirName[32];
+	char titleId[0x10];
+	char dirName[0x20];
 	uint64_t saveBlocks;
 	char mountPath[16];
 	bool reserved;
