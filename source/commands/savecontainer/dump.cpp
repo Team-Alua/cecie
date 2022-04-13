@@ -14,13 +14,6 @@
 #include "commands/savecontainer/dump.hpp"
 
 
-
-struct FileDumpResponse {
-	char path[128];
-	uint64_t size;
-};
-
-
 void DumpSaveContainerCommand::Execute(Network & network, int & sessionIndex, Sessions & sessions) {
 	ClientSession * clientSession = sessions.Get(sessionIndex);
 	if (strlen(clientSession->mountPath) == 0) {
@@ -34,11 +27,11 @@ void DumpSaveContainerCommand::Execute(Network & network, int & sessionIndex, Se
 	sprintf(mountFolder, "/mnt/sandbox/%s_000%s/", TITLE_ID, clientSession->mountPath);
 
 
-	std::vector<FileDumpResponse> container;
+	std::vector<FileMetadata> container;
 
 	folderWalker(mountFolder, "", [&](const char * root, const char * relativePath){
-		FileDumpResponse dump;
-		memset(&dump, 0, sizeof(FileDumpResponse));
+		FileMetadata dump;
+		memset(&dump, 0, sizeof(FileMetadata));
 		sprintf(dump.path, "%s%s", root, relativePath);
 		
 		struct stat buf;
@@ -47,7 +40,7 @@ void DumpSaveContainerCommand::Execute(Network & network, int & sessionIndex, Se
 		if (result == -1) {
 			log("There was an issue checking size of %s - %i", dump.path, errno);
 		}
-		memset(&dump, 0, sizeof(FileDumpResponse));
+		memset(&dump, 0, sizeof(FileMetadata));
 		sprintf(dump.path, "%s", relativePath);
 		dump.size = buf.st_size;
 		container.push_back(dump);
@@ -56,7 +49,7 @@ void DumpSaveContainerCommand::Execute(Network & network, int & sessionIndex, Se
 	int32_t fileCount = container.size();
 	network.writeFull(&fileCount);
 
-	for(FileDumpResponse fileDumpResponse: container) {
+	for(FileMetadata fileDumpResponse: container) {
 		log("Sending name: %s size: %u", fileDumpResponse.path, fileDumpResponse.size);
 		network.writeFull(&fileDumpResponse);
 		char targetFolder[256];

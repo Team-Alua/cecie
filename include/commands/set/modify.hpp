@@ -2,8 +2,14 @@
 
 #include "commands/set/base.hpp"
 
-class ModifySet : public CommandSet {
 
+#include "commands/savecontainer/downloadfile.hpp"
+#include "commands/savecontainer/uploadfile.hpp"
+
+class ModifySet : public CommandSet {
+private:
+	DownloadFileFromSaveContainerCommand downloadFileFromSaveContainerCommand;
+	UploadFileToSaveContainerCommand uploadFileToSaveContainerCommand;
 public:
 	virtual void Initialize() override;
 

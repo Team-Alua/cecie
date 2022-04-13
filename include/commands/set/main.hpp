@@ -9,6 +9,8 @@
 #include "commands/savecontainer/reset.hpp"
 #include "commands/savecontainer/listfiles.hpp"
 #include "commands/savecontainer/delete.hpp"
+#include "commands/savecontainer/download.hpp"
+#include "commands/savecontainer/upload.hpp"
 
 class MainSet : public CommandSet {
 private:
@@ -19,6 +21,8 @@ private:
 	ResetSaveContainerCommand resetSaveContainerCommand;
 	ListFilesInSaveContainerCommand listFilesInSaveContainerCommand;
 	DeleteSaveContainerCommand deleteSaveContainerCommand;
+	DownloadSaveContainerCommand downloadSaveContainerCommand;
+	UploadSaveContainerCommand uploadSaveContainerCommand;
 public:
 	virtual void Initialize() override;
 

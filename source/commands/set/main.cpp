@@ -8,6 +8,8 @@ void MainSet::Initialize() {
 	cmds["ResetSaveContainer"] = &resetSaveContainerCommand;
 	cmds["ListFilesInSaveContainer"] = &listFilesInSaveContainerCommand;
 	cmds["DeleteSaveContainer"] = &deleteSaveContainerCommand;
+	cmds["DownloadSaveContainer"] = &downloadSaveContainerCommand;
+	cmds["UploadSaveContainer"] = &uploadSaveContainerCommand;
 }
 
 const char * MainSet::Name() {

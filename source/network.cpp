@@ -110,14 +110,13 @@ ssize_t Network::downloadFile(int fd, size_t fileSize) {
 		if (received <= 0) {
 			return received;
 		}
+
 		while (received > 0) {
 			size_t fileOffset = fileSize - bytesRemaining;
 			ssize_t bytesWritten = pwrite(fd, buffer, received, fileOffset);
-			if (bytesWritten < 0) {
+			// What to do when it writes nothing?
+			if (bytesWritten <= 0) {
 				return bytesWritten;
-			}
-			if (bytesWritten == 0) {
-				break;
 			}
 			bytesRemaining -= bytesWritten;
 			received -= bytesWritten;
