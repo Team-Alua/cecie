@@ -43,21 +43,22 @@ void clientHandler(int connfd, Sessions * sessions) {
 		log("Executing cmd %s.", commandName);
 		cmd->Execute(network, sessionIndex, *sessions);
 	}
-	if (sessionIndex >= 0) {
-		if (sessionIndex > -1) {
-			ClientSession * clientSession = sessions->Get(sessionIndex);
-			if (strlen(clientSession->mountPath) > 0) {
-				OrbisSaveDataMountPoint mp;
-				memset(&mp, 0, sizeof(mp));
-				strcpy(mp.data, clientSession->mountPath);
-				sceSaveDataUmount(&mp);
-			}
-		}
 
+	ClientSession * clientSession = sessions->Get(sessionIndex);
+
+	if (clientSession != NULL && strlen(clientSession->mountPath) > 0) {
+		OrbisSaveDataMountPoint mp;
+		memset(&mp, 0, sizeof(mp));
+		strcpy(mp.data, clientSession->mountPath);
+		sceSaveDataUmount(&mp);
+	}
+
+	if (sessionIndex >= 0) {
 		
 		log("Freeing %i", sessionIndex);
 		sessions->Free(sessionIndex);
 	}
+
 	close(connfd);
 }
 
