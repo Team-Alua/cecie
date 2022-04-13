@@ -19,16 +19,15 @@ void CommandSystem::Initialize() {
 	}
 
 
-	phaseEventSystem.AddEventListener([](Event& e, void * instance) {
-		auto cs = ((CommandSystem *) instance);
+	phaseEventSystem.AddEventListener([this](Event& e) {
 		auto state = *(CommandSystemStates*)e.value;
 		if (state == CommandSystemStates::Done) {
-			cs->MarkFinished();
+			this->MarkFinished();
 			return;
 		}
 
-		cs->ChangeToCommandSet(state);
-	}, this);
+		this->ChangeToCommandSet(state);
+	});
 
 	this->AddEventPublishers(&phaseEventSystem);
 

@@ -1,14 +1,14 @@
 #pragma once
 
 #include <vector>
+#include <functional>
 
 #include "commands/events/event.hpp"
-#include "commands/events/callback.hpp"
 
 
 class CommandEventSystem {
 protected:
-	std::vector<EventCallbackPair> eventListeners;
+	std::vector<std::function<void(Event&)>> eventListeners;
 
 	void OnNotify(Event& event);
 
@@ -19,7 +19,7 @@ public:
 
 	CommandEventSystem(const char * evtName): eventName(evtName) {}
 
-	void AddEventListener(EventCallback cb, void * instance);
+	void AddEventListener(std::function<void(Event&)> cb);
 
 	void Notify(Event& event);
 
