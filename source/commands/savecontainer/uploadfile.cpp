@@ -9,14 +9,6 @@
 void UploadFileToSaveContainerCommand::Execute(Network & network, int & sessionIndex, Sessions & sessions) {
 	ClientSession * clientSession = sessions.Get(sessionIndex);
 
-	if (strlen(clientSession->mountPath) == 0) {
-		network.sendResponse("uploadfile.notmounted");
-		CommandSystemStates state = CommandSystemStates::MainLoop;
-		this->Notify(EventNamePhaseChange, &state);
-		return;
-	}
-	network.sendResponse("ok");
-
 	FileMetadata metadata;
 
 	ssize_t metaDataResult  = network.readFull(&metadata);
@@ -38,3 +30,4 @@ void UploadFileToSaveContainerCommand::Execute(Network & network, int & sessionI
 	}
 	network.sendResponse("ok");
 }
+
