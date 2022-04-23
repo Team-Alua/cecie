@@ -3,9 +3,9 @@
 #include "commands/set/base.hpp"
 
 
-#include "commands/savecontainer/downloadfile.hpp"
-#include "commands/savecontainer/uploadfile.hpp"
-#include "commands/savecontainer/finish.hpp"
+#include "commands/savecontainer/_modify/downloadfile.hpp"
+#include "commands/savecontainer/_modify/uploadfile.hpp"
+#include "commands/savecontainer/_modify/finish.hpp"
 
 class ModifySet : public CommandSet {
 private:
