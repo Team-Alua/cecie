@@ -22,7 +22,7 @@ void DownloadFileFromSaveContainerCommand::Execute(Network & network, int & sess
 	char mountFolder[256];
 	memset(mountFolder, 0, sizeof(mountFolder));
 	sprintf(mountFolder, "/mnt/sandbox/%s_000%s/%s", TITLE_ID, clientSession->mountPath,  upload.path);
-	ssize_t uploadResult = network.uploadFile(mountFolder, upload.size);
+	ssize_t uploadResult = network.uploadFile(mountFolder);
 	if (uploadResult == -1) {
 		// log error
 		CommandSystemStates state = CommandSystemStates::Done;

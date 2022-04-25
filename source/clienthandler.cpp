@@ -36,8 +36,7 @@ void clientHandler(int connfd, Sessions * sessions) {
 		auto cmd = setPtr->Get(commandName);
 		if (cmd == NULL) {
 			log("User supplied invalid command %s.", commandName);
-			network.sendResponse("invalid.cmd");
-			continue;
+			break;
 		}
 		network.sendResponse("ok");
 		log("Executing cmd %s.", commandName);

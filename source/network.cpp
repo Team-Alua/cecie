@@ -2,6 +2,7 @@
 
 #include <fcntl.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <stdio.h>
 #include <errno.h>
 
@@ -53,13 +54,20 @@ ssize_t Network::uploadFile(int fd, size_t size) {
 }
 
 ssize_t Network::uploadFile(const char * path, size_t size) {
+
 	int fd = open(path, O_RDONLY);
 	if (fd == -1) {
 		return -1;
 	}
-
-	ssize_t result = Network::uploadFile(fd, size);
-
+	ssize_t result;
+	if (size == 0) {
+		struct stat buff;
+		memset(&buff, 0, sizeof(struct stat));
+		stat(path, &buff);
+		result = Network::uploadFile(fd, buff.st_size);
+	} else {
+		result = Network::uploadFile(fd, size);
+	}
 	int err = errno;
 
 	close(fd);

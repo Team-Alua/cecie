@@ -59,7 +59,7 @@ public:
 
 	ssize_t writeFull(void * buffer, size_t size);
 
-	ssize_t uploadFile(const char * path, size_t size);
+	ssize_t uploadFile(const char * path, size_t size = 0);
 
 	ssize_t uploadFile(int fd, size_t size);
 
