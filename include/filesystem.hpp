@@ -2,10 +2,7 @@
 
 #include <functional>
 
-struct FileMetadata {
-	char path[128];
-	uint64_t size;
-};
+#include "_types/filesystem.hpp"
 
 void folderWalker(const char * root, const char * relativePath,  std::function<void(const char*, const char *)>);
 

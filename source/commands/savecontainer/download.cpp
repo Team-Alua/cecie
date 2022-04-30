@@ -39,6 +39,7 @@ void DownloadSaveContainerCommand::Execute(Network & network, int & sessionIndex
 		network.sendResponse("download.notexist");
 		return;
 	}
+	network.sendResponse("ok");
 
 	// Download pfs file
 	int pfsDownloadResult = network.uploadFile(targetFile, 96);
@@ -49,6 +50,7 @@ void DownloadSaveContainerCommand::Execute(Network & network, int & sessionIndex
 		network.sendResponse(msg);
 		return;
 	}
+	network.sendResponse("ok");
 
 	// Download raw save
 	memset(targetFile, 0, sizeof(targetFile));

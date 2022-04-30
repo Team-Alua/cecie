@@ -38,7 +38,6 @@ void clientHandler(int connfd, Sessions * sessions) {
 			log("User supplied invalid command %s.", commandName);
 			break;
 		}
-		network.sendResponse("ok");
 		log("Executing cmd %s.", commandName);
 		cmd->Execute(network, sessionIndex, *sessions);
 	}
