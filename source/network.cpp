@@ -170,6 +170,6 @@ ssize_t Network::sendResponse(const char * msg) {
 		response[i] = msg[i];
 	}
 	
-	return write(connfd, response, MSG_LENGTH);
+	return Network::writeFull(response, MSG_LENGTH);
 }
 
