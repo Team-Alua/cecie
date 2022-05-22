@@ -156,12 +156,20 @@ ssize_t Network::downloadFile(const char * path, size_t size) {
 }
 
 ssize_t Network::sendResponse(const char * msg) {
-	int msgLength = strlen(msg);
-	
-	ssize_t result = write(connfd, &msgLength, sizeof(msgLength));
-	if (result <= 0) {
-		return result;
+	const int MSG_LENGTH = 64;
+	char response[64];
+	memset(response, 0, MSG_LENGTH);
+
+	for(int i = 0; i < strlen(msg); i++) {
+		// Just incase the message length is above
+		// The limit
+		if(i == 64) {
+			break;
+		}
+
+		response[i] = msg[i];
 	}
-	return write(connfd, msg, msgLength);
+	
+	return write(connfd, msg, MSG_LENGTH);
 }
 
