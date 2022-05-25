@@ -45,10 +45,10 @@ void UploadSaveContainerCommand::Execute(Network & network, int & sessionIndex, 
 
 	// Download pfs file
 	int pfsDownloadResult = network.downloadFile(targetFile, 96);
-	if (pfsDownloadResult == -1) {
+	if (pfsDownloadResult < 0) {
 		char msg[32];
 		memset(msg, 0, sizeof(msg));
-		sprintf(msg, "upload.download.error.%i", errno);
+		sprintf(msg, "upload.download.error.%i,%i", pfsDownloadResult, errno);
 		network.sendResponse(msg);
 		return;
 	}
@@ -60,10 +60,10 @@ void UploadSaveContainerCommand::Execute(Network & network, int & sessionIndex, 
 	sprintf(targetFile, "/user/home/%x/savedata/%s/sdimg_%s", outUserId, clientSession->titleId, clientSession->dirName);
 	int32_t fileSize = clientSession->saveBlocks * 32768;
 	int rawDownloadResult = network.downloadFile(targetFile, fileSize);
-	if (rawDownloadResult == -1) {
+	if (rawDownloadResult < 0) {
 		char msg[32];
 		memset(msg, 0, sizeof(msg));
-		sprintf(msg, "upload.download.error.%i", errno);
+		sprintf(msg, "upload.download.error.%i.%i",  rawDownloadResult, errno);
 		network.sendResponse(msg);
 		return;
 	}

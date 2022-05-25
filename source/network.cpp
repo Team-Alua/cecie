@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <stdio.h>
 #include <errno.h>
+#include "log.hpp"
 
 ssize_t Network::readFull(void * buffer, size_t size) {
 	size_t offset = 0;
@@ -137,7 +138,7 @@ ssize_t Network::downloadFile(int fd, size_t fileSize) {
 
 ssize_t Network::downloadFile(const char * path, size_t size) {
 
-	int fd = open(path, O_WRONLY | O_CREAT | O_TRUNC);
+	int fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0744);
 	if (fd == -1) {
 		return -1;
 	}
@@ -148,6 +149,7 @@ ssize_t Network::downloadFile(const char * path, size_t size) {
 	close(fd);
 
 	if (result == -1) {
+		result = -2;
 		remove(path);
 	}
 
@@ -159,7 +161,7 @@ ssize_t Network::sendResponse(const char * msg) {
 	const int MSG_LENGTH = 64;
 	char response[64];
 	memset(response, 0, MSG_LENGTH);
-
+	log("msg: %s size: %d", msg, strlen(msg));
 	for(int i = 0; i < strlen(msg); i++) {
 		// Just incase the message length is above
 		// The limit
@@ -169,7 +171,6 @@ ssize_t Network::sendResponse(const char * msg) {
 
 		response[i] = msg[i];
 	}
-	
 	return Network::writeFull(response, MSG_LENGTH);
 }
 
